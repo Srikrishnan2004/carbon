@@ -1,0 +1,74 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "tasks": {
+    "build": {
+      "outputs": [
+        "dist/**",
+        "build/**",
+        "api/**",
+        "public/build/**",
+        ".next/**",
+        "!.next/cache/**"
+      ],
+      "dependsOn": ["^build"]
+    },
+    "carbon#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["api/index.js", "api/build/**", "public/build/**"]
+    },
+    "test": {
+      "outputs": ["coverage/**"],
+      "dependsOn": []
+    },
+    "lint": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "clean": {
+      "cache": false
+    },
+    "deploy": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "db:start": {
+      "outputs": []
+    },
+    "db:kill": {
+      "outputs": []
+    },
+    "db:types": {
+      "outputs": [],
+      "cache": true
+    },
+    "db:init": {
+      "outputs": []
+    },
+    "db:migrate": {
+      "outputs": [],
+      "cache": false
+    },
+    "db:push": {
+      "outputs": []
+    },
+    "db:pull": {
+      "outputs": []
+    },
+    "db:seed": {
+      "outputs": [],
+      "cache": false
+    },
+    "db:migrate:force": {
+      "outputs": []
+    },
+    "setup": {
+      "cache": false,
+      "outputs": []
+    }
+  }
+}

@@ -1,0 +1,38 @@
+import { error } from "@carbon/auth";
+import { requirePermissions } from "@carbon/auth/auth.server";
+import { flash } from "@carbon/auth/session.server";
+import type { LoaderFunctionArgs } from "@vercel/remix";
+import { json } from "@vercel/remix";
+import { getAccountSubcategoriesByCategory } from "~/modules/accounting";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { client, companyId } = await requirePermissions(request, {
+    view: "accounting",
+  });
+
+  const url = new URL(request.url);
+  const searchParams = new URLSearchParams(url.search);
+  const accountCategoryId = searchParams.get("accountCategoryId") as string;
+
+  if (!accountCategoryId || accountCategoryId === "undefined")
+    return json({
+      data: [],
+    });
+
+  const subcategories = await getAccountSubcategoriesByCategory(
+    client,
+    accountCategoryId,
+    companyId
+  );
+  if (subcategories.error) {
+    return json(
+      subcategories,
+      await flash(
+        request,
+        error(subcategories.error, "Failed to get account subcategories")
+      )
+    );
+  }
+
+  return json(subcategories);
+}

@@ -1,0 +1,79 @@
+{
+  "devDependencies": {
+    "csv-parse": "^5.5.0",
+    "eslint": "^8.23.1",
+    "eslint-config-carbon": "*",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.2",
+    "npm-run-all": "^4.1.5",
+    "postcss-nesting": "12.1.5",
+    "prettier": "^2.8.0",
+    "rimraf": "^5.0.5",
+    "supabase": "1.204.3",
+    "ts-morph": "^22.0.0",
+    "tsx": "^4.13.2"
+  },
+  "lint-staged": {
+    "(apps|packages)/**/*.{js,ts,jsx,tsx}": [
+      "prettier --write",
+      "eslint --fix --max-warnings=0"
+    ],
+    "*.json": [
+      "prettier --write"
+    ]
+  },
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "build:packages": "turbo run build --filter=./packages/*",
+    "build:app": "turbo run build --filter=!www",
+    "ci:migrations": "npm run -w ci ci:migrations",
+    "clean": "turbo run clean && rimraf ./node_modules && rimraf ./package-lock.json",
+    "db:build": "run-s db:kill db:start setup",
+    "db:function:new": "npm run db:function:new -w @carbon/database",
+    "db:kill": "npm run db:kill -w @carbon/database",
+    "db:kill:redis": "npm run db:kill -w @carbon/kv",
+    "db:migrate": "npm run db:migrate -w @carbon/database",
+    "db:migrate:force": "turbo run db:migrate:force --no-cache",
+    "db:migrate:new": "npm run db:migrate:new -w @carbon/database",
+    "db:pull": "turbo run db:pull",
+    "db:push": "turbo run db:push",
+    "db:restart": "run-s db:stop db:start",
+    "db:seed": "turbo run db:seed --no-cache",
+    "db:start": "npm run db:start -w @carbon/database",
+    "db:start:redis": "npm run db:start -w @carbon/kv",
+    "db:stop": "npm run db:stop -w @carbon/database",
+    "db:types": "npm run db:types -w @carbon/database",
+    "deploy": "turbo run deploy",
+    "dev": "run-p dev:erp dev:stripe",
+    "dev:erp": "turbo run dev --filter=./apps/erp --filter=./packages/ ",
+    "dev:jobs": "npm run -w @carbon/jobs dev:jobs",
+    "dev:stripe": "npm run -w @carbon/stripe dev:stripe",
+    "dev:mes": "turbo run dev --filter=./apps/mes",
+    "dev:starter": "turbo run dev --filter=./apps/starter --filter=./packages/",
+    "dev:academy": "turbo run dev --filter=./apps/academy --filter=./packages/",
+    "dev:packages": "turbo run dev --filter=./packages/*",
+    "generate:types": "tsx scripts/generate-db-types.ts",
+    "generate:swagger": "tsx scripts/generate-swagger-docs.ts && npx prettier --write ./packages/database/src/swagger-docs-schema.ts ",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo run lint",
+    "novu:sync": "npx novu@latest sync --bridge-url https://app.carbon.ms/api/novu --secret-key $NOVU_SECRET_KEY --api-url https://api.novu.co",
+    "predb:build": "tsx scripts/setup-env-files.ts",
+    "postdb:build": "run-s generate:types generate:swagger",
+    "prepare": "npx husky install",
+    "setup": "turbo run setup",
+    "test": "turbo run test",
+    "types": "turbo run types"
+  },
+  "workspaces": [
+    "apps/*",
+    "ci",
+    "examples/*",
+    "packages/*"
+  ],
+  "packageManager": "npm@10.7.0",
+  "dependencies": {
+    "string-hash": "^1.1.3",
+    "turbo": "^2.5.5"
+  }
+}

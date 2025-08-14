@@ -1,0 +1,45 @@
+import { assertIsPost, error, getCarbonServiceRole } from "@carbon/auth";
+import { requirePermissions } from "@carbon/auth/auth.server";
+import { flash } from "@carbon/auth/session.server";
+import { validator } from "@carbon/form";
+import { FunctionRegion } from "@supabase/supabase-js";
+import { json, type ActionFunctionArgs } from "@vercel/remix";
+import { procedureSyncValidator } from "~/modules/production";
+
+export async function action({ request }: ActionFunctionArgs) {
+  assertIsPost(request);
+  const { companyId, userId } = await requirePermissions(request, {
+    update: "production",
+  });
+
+  const formData = await request.formData();
+  const validation = await validator(procedureSyncValidator).validate(formData);
+
+  if (validation.error) {
+    return json(
+      { success: false },
+      await flash(request, error(validation.error, "Invalid form data"))
+    );
+  }
+
+  const serviceRole = await getCarbonServiceRole();
+  const sync = await serviceRole.functions.invoke("get-method", {
+    body: {
+      type: "procedureToOperation",
+      sourceId: validation.data.procedureId,
+      targetId: validation.data.operationId,
+      companyId,
+      userId,
+    },
+    region: FunctionRegion.UsEast1,
+  });
+
+  if (sync.error) {
+    return json(
+      { success: false },
+      await flash(request, error(sync.error, "Failed to sync procedure"))
+    );
+  }
+
+  return { success: true };
+}

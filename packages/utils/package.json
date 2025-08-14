@@ -1,0 +1,37 @@
+{
+  "name": "@carbon/utils",
+  "dependencies": {
+    "lodash.template": "^4.5.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@carbon/jest": "*",
+    "@carbon/tsconfig": "*",
+    "@types/jest": "^26.0.22",
+    "@types/lodash.template": "4.5.3",
+    "@types/react": "^18.2.74",
+    "@types/react-dom": "^18.2.24",
+    "eslint": "^8.23.1",
+    "eslint-config-carbon": "*",
+    "humanize-duration": "^3.32.0",
+    "jest": "^26.6.3",
+    "react": "^18.3.1",
+    "tsup": "^6.5.0",
+    "typescript": "^5.2.2"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "jest": {
+    "preset": "@carbon/jest/node"
+  },
+  "private": true,
+  "scripts": {
+    "clean": "rimraf .turbo node_modules dist",
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external react",
+    "lint": "TIMING=1 eslint \"src/**/*.ts*\"",
+    "test": "jest"
+  },
+  "sideEffects": false,
+  "version": "*"
+}

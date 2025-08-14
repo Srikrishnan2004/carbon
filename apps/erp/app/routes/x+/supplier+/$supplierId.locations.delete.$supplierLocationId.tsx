@@ -1,0 +1,61 @@
+import { error, success } from "@carbon/auth";
+import { requirePermissions } from "@carbon/auth/auth.server";
+import { flash } from "@carbon/auth/session.server";
+import type { ClientActionFunctionArgs } from "@remix-run/react";
+import type { ActionFunctionArgs } from "@vercel/remix";
+import { redirect } from "@vercel/remix";
+import { deleteSupplierLocation } from "~/modules/purchasing";
+import { path } from "~/utils/path";
+import { supplierLocationsQuery } from "~/utils/react-query";
+
+export async function action({ request, params }: ActionFunctionArgs) {
+  const { client } = await requirePermissions(request, {
+    delete: "purchasing",
+  });
+
+  const { supplierId, supplierLocationId } = params;
+  if (!supplierId || !supplierLocationId) {
+    throw redirect(
+      path.to.suppliers,
+      await flash(
+        request,
+        error(params, "Failed to get a supplier location id")
+      )
+    );
+  }
+
+  const { error: deleteSupplierLocationError } = await deleteSupplierLocation(
+    client,
+    supplierId,
+    supplierLocationId
+  );
+  if (deleteSupplierLocationError) {
+    const errorMessage =
+      deleteSupplierLocationError.code === "23503"
+        ? "Supplier location is used elsewhere, cannot delete"
+        : "Failed to delete supplier location";
+    throw redirect(
+      path.to.supplierLocations(supplierId),
+      await flash(request, error(deleteSupplierLocationError, errorMessage))
+    );
+  }
+
+  throw redirect(
+    path.to.supplierLocations(supplierId),
+    await flash(request, success("Successfully deleted supplier location"))
+  );
+}
+
+export async function clientAction({
+  serverAction,
+  params,
+}: ClientActionFunctionArgs) {
+  const { supplierId } = params;
+  if (supplierId) {
+    window.clientCache?.setQueryData(
+      supplierLocationsQuery(supplierId).queryKey,
+      null
+    );
+  }
+  return await serverAction();
+}
