@@ -2,5 +2,11 @@
   "buildCommand": "npm run build",
   "outputDirectory": "build/client",
   "installCommand": "npm install",
-  "framework": "remix"
+  "framework": "remix",
+  "git": {
+    "deploymentEnabled": {
+      "fresh-main": true,
+      "main": false
+    }
+  }
 }
