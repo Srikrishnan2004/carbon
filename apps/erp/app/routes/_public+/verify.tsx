@@ -35,7 +35,7 @@ import type { FormActionData, Result } from "~/types";
 import { path } from "~/utils/path";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Verify Email" }];
+  return [{ title: "Dreampi | Verify Email" }];
 };
 
 export const config = {
@@ -139,39 +139,41 @@ export default function VerifyRoute() {
 
   return (
     <>
-      <div className="flex justify-center mb-4">
-        <img src="/carbon-logo-mark.svg" alt="Carbon Logo" className="w-36" />
-      </div>
-      <div className="rounded-lg md:bg-card md:border md:border-border md:shadow-lg p-8 w-[380px]">
-        <ValidatedForm
-          fetcher={fetcher}
-          validator={verifyValidator}
-          defaultValues={{ email, redirectTo }}
-          method="post"
-        >
-          <Hidden name="email" value={email} />
-          <Hidden name="redirectTo" value={redirectTo} />
-          <VStack spacing={4} className="items-center">
-            <Heading size="h3">Verify your email</Heading>
-            <p className="text-muted-foreground tracking-tight text-sm text-center">
-              We've sent a verification code to {email}
-            </p>
+      <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto">
+        <div className="flex items-center justify-center w-36 h-36 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl mb-8">
+          <span className="text-6xl font-bold text-white">D</span>
+        </div>
+        <div className="rounded-lg md:bg-card md:border md:border-border md:shadow-lg p-8 w-[380px]">
+          <ValidatedForm
+            fetcher={fetcher}
+            validator={verifyValidator}
+            defaultValues={{ email, redirectTo }}
+            method="post"
+          >
+            <Hidden name="email" value={email} />
+            <Hidden name="redirectTo" value={redirectTo} />
+            <VStack spacing={4} className="items-center">
+              <Heading size="h3">Verify your email</Heading>
+              <p className="text-muted-foreground tracking-tight text-sm text-center">
+                We've sent a verification code to {email}
+              </p>
 
-            {fetcher.data?.success === false && fetcher.data?.message && (
-              <Alert variant="destructive">
-                <LuCircleAlert className="w-4 h-4" />
-                <AlertTitle>Verification Error</AlertTitle>
-                <AlertDescription>{fetcher.data?.message}</AlertDescription>
-              </Alert>
-            )}
+              {fetcher.data?.success === false && fetcher.data?.message && (
+                <Alert variant="destructive">
+                  <LuCircleAlert className="w-4 h-4" />
+                  <AlertTitle>Verification Error</AlertTitle>
+                  <AlertDescription>{fetcher.data?.message}</AlertDescription>
+                </Alert>
+              )}
 
-            <InputOTP name="code" label="" />
+              <InputOTP name="code" label="" />
 
-            <Button type="button" variant="link" size="sm" asChild>
-              <Link to="/login">Use a different email</Link>
-            </Button>
-          </VStack>
-        </ValidatedForm>
+              <Button type="button" variant="link" size="sm" asChild>
+                <Link to="/login">Use a different email</Link>
+              </Button>
+            </VStack>
+          </ValidatedForm>
+        </div>
       </div>
     </>
   );

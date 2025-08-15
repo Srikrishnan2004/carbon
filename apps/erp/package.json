@@ -1,5 +1,5 @@
 {
-  "name": "erp",
+  "name": "dreampi-erp",
   "type": "module",
   "dependencies": {
     "@ai-sdk/openai": "~0.0.66",
@@ -86,7 +86,6 @@
     "zod-form-data": "*"
   },
   "devDependencies": {
-    "@carbon/tailwind": "*",
     "@carbon/tsconfig": "*",
     "@trigger.dev/build": "3.3.12",
     "@types/d3": "^7.4.0",

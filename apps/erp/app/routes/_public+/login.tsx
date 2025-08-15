@@ -13,16 +13,7 @@ import { getUserByEmail } from "@carbon/auth/users.server";
 import { sendVerificationCode } from "@carbon/auth/verification.server";
 import { Hidden, Input, Submit, ValidatedForm, validator } from "@carbon/form";
 import { redis } from "@carbon/kv";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-  Button,
-  Heading,
-  Separator,
-  toast,
-  VStack,
-} from "@carbon/react";
+import { Button, Heading, toast, VStack } from "@carbon/react";
 import { useMode } from "@carbon/remix";
 import { Edition } from "@carbon/utils";
 import { Turnstile } from "@marsidev/react-turnstile";
@@ -41,7 +32,7 @@ import type { FormActionData, Result } from "~/types";
 import { path } from "~/utils/path";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Login" }];
+  return [{ title: "Dreampi | Login" }];
 };
 
 export const config = {
@@ -189,130 +180,206 @@ export default function LoginRoute() {
 
   return (
     <>
-      <div className="flex justify-center mb-4">
-        <img src="/carbon-logo-mark.svg" alt="Carbon Logo" className="w-36" />
+      <div className="flex justify-center mb-8">
+        <div className="relative group">
+          <div className="flex items-center justify-center w-40 h-40 bg-gradient-to-br from-purple-500 via-blue-500 to-purple-600 rounded-3xl shadow-2xl shadow-purple-500/25 pulse-glow">
+            <span className="text-7xl font-bold text-white">D</span>
+          </div>
+          {/* Floating particles effect */}
+          <div className="absolute -top-2 -right-2 w-4 h-4 bg-blue-400 rounded-full animate-ping"></div>
+          <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-purple-400 rounded-full animate-ping animation-delay-1000"></div>
+        </div>
       </div>
-      <div className="rounded-lg md:bg-card md:border md:border-border md:shadow-lg p-8 w-[380px]">
-        {fetcher.data?.success === true && fetcher.data?.mode === "login" ? (
-          <>
-            <VStack spacing={4} className="items-center justify-center">
-              <Heading size="h3">Check your email</Heading>
-              <p className="text-muted-foreground tracking-tight text-sm">
-                We've sent you a magic link to sign in to your account.
-              </p>
-            </VStack>
-          </>
-        ) : mode === "verify" ? (
-          <VStack spacing={4} className="items-center">
-            <Heading size="h3">Verify your email</Heading>
-            <p className="text-muted-foreground tracking-tight text-sm text-center">
-              We've sent a verification code to {signupEmail}
-            </p>
-            <p className="text-muted-foreground tracking-tight text-xs text-center">
-              Redirecting to verification page...
-            </p>
-            <Button
-              type="button"
-              variant="link"
-              size="sm"
-              onClick={() => {
-                setMode("login");
-                setSignupEmail("");
-                // Reset fetcher data
-                window.location.reload();
-              }}
-            >
-              Use a different email
-            </Button>
-          </VStack>
-        ) : (
-          <ValidatedForm
-            fetcher={fetcher}
-            validator={magicLinkValidator}
-            defaultValues={{ redirectTo }}
-            method="post"
-            action="/login"
-          >
-            <Hidden name="redirectTo" value={redirectTo} type="hidden" />
-            <Hidden name="turnstileToken" value={turnstileToken} />
-            <VStack spacing={4}>
-              {fetcher.data?.success === false && fetcher.data?.message && (
-                <Alert variant="destructive">
-                  <LuCircleAlert className="w-4 h-4" />
-                  <AlertTitle>Authentication Error</AlertTitle>
-                  <AlertDescription>{fetcher.data?.message}</AlertDescription>
-                </Alert>
-              )}
 
-              <Input name="email" label="" placeholder="Email Address" />
+      <div className="modern-card rounded-3xl p-10 w-[420px] relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-purple-400/20 to-blue-400/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
 
-              <Submit
-                isDisabled={
-                  fetcher.state !== "idle" ||
-                  (CarbonEdition === Edition.Cloud && !turnstileToken)
-                }
-                isLoading={fetcher.state === "submitting"}
-                size="lg"
-                className="w-full"
-                withBlocker={false}
-              >
-                Continue with Email
-              </Submit>
-              {CarbonEdition === Edition.Cloud && (
-                <div className="w-full flex justify-center">
-                  <Turnstile
-                    siteKey={CLOUDFLARE_TURNSTILE_SITE_KEY}
-                    onSuccess={(token) => setTurnstileToken(token)}
-                    onError={() => setTurnstileToken("")}
-                    onExpire={() => setTurnstileToken("")}
-                    options={{
-                      theme: theme === "dark" ? "dark" : "light",
-                    }}
-                  />
+        <div className="relative z-10">
+          {fetcher.data?.success === true && fetcher.data?.mode === "login" ? (
+            <>
+              <VStack spacing={6} className="items-center justify-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl flex items-center justify-center">
+                  <svg
+                    className="w-8 h-8 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
                 </div>
-              )}
-              <Separator />
+                <Heading size="h3" className="gradient-text">
+                  Check your email
+                </Heading>
+                <p className="text-muted-foreground tracking-tight text-center leading-relaxed">
+                  We've sent you a magic link to sign in to your account.
+                </p>
+              </VStack>
+            </>
+          ) : mode === "verify" ? (
+            <VStack spacing={6} className="items-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  />
+                </svg>
+              </div>
+              <Heading size="h3" className="gradient-text">
+                Verify your email
+              </Heading>
+              <p className="text-muted-foreground tracking-tight text-center leading-relaxed">
+                We've sent a verification code to {signupEmail}
+              </p>
+              <p className="text-muted-foreground tracking-tight text-xs text-center">
+                Redirecting to verification page...
+              </p>
               <Button
                 type="button"
-                size="lg"
-                className="w-full"
-                onClick={onSignInWithGoogle}
-                isDisabled={fetcher.state !== "idle"}
-                variant="secondary"
-                leftIcon={<GoogleIcon />}
+                variant="link"
+                size="sm"
+                onClick={() => {
+                  setMode("login");
+                  setSignupEmail("");
+                  // Reset fetcher data
+                  window.location.reload();
+                }}
+                className="text-purple-600 hover:text-purple-700"
               >
-                Continue with Google
+                Use a different email
               </Button>
             </VStack>
-          </ValidatedForm>
-        )}
+          ) : (
+            <ValidatedForm
+              fetcher={fetcher}
+              validator={magicLinkValidator}
+              defaultValues={{ redirectTo }}
+              method="post"
+              action="/login"
+            >
+              <Hidden name="redirectTo" value={redirectTo} type="hidden" />
+              <Hidden name="turnstileToken" value={turnstileToken} />
+              <VStack spacing={6}>
+                {fetcher.data?.success === false && fetcher.data?.message && (
+                  <div className="w-full p-4 bg-red-50 border border-red-200 rounded-2xl">
+                    <div className="flex items-center space-x-3">
+                      <LuCircleAlert className="w-5 h-5 text-red-500" />
+                      <div>
+                        <p className="text-sm font-medium text-red-800">
+                          Authentication Error
+                        </p>
+                        <p className="text-sm text-red-700">
+                          {fetcher.data?.message}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="w-full">
+                  <Input
+                    name="email"
+                    label=""
+                    placeholder="Enter your email address"
+                    className="input-modern h-14 text-lg"
+                  />
+                </div>
+
+                <Submit
+                  isDisabled={
+                    fetcher.state !== "idle" ||
+                    (CarbonEdition === Edition.Cloud && !turnstileToken)
+                  }
+                  isLoading={fetcher.state === "submitting"}
+                  size="lg"
+                  className="w-full h-14 text-lg font-semibold btn-modern bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-2xl shadow-lg shadow-purple-500/25"
+                  withBlocker={false}
+                >
+                  Continue with Email
+                </Submit>
+
+                {CarbonEdition === Edition.Cloud && (
+                  <div className="w-full flex justify-center">
+                    <Turnstile
+                      siteKey={CLOUDFLARE_TURNSTILE_SITE_KEY}
+                      onSuccess={(token) => setTurnstileToken(token)}
+                      onError={() => setTurnstileToken("")}
+                      onExpire={() => setTurnstileToken("")}
+                      options={{
+                        theme: theme === "dark" ? "dark" : "light",
+                      }}
+                    />
+                  </div>
+                )}
+
+                <div className="relative w-full">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-200"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-4 bg-white text-gray-500">
+                      or continue with
+                    </span>
+                  </div>
+                </div>
+
+                <Button
+                  type="button"
+                  size="lg"
+                  className="w-full h-14 text-lg font-semibold btn-modern bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  onClick={onSignInWithGoogle}
+                  isDisabled={fetcher.state !== "idle"}
+                  variant="secondary"
+                  leftIcon={<GoogleIcon />}
+                >
+                  Continue with Google
+                </Button>
+              </VStack>
+            </ValidatedForm>
+          )}
+        </div>
       </div>
 
       {mode !== "verify" && fetcher.data?.success !== true && (
-        <div className="text-center mt-4">
-          <p className="text-sm text-muted-foreground">
+        <div className="text-center mt-6">
+          <p className="text-base text-muted-foreground font-medium">
             Login or create a new account
           </p>
         </div>
       )}
 
-      <div className="text-sm text-center text-balance text-muted-foreground w-[380px] mt-4">
+      <div className="text-sm text-center text-balance text-muted-foreground w-[420px] mt-6 leading-relaxed">
         <p>
           By signing in, you agree to the{" "}
           <a
-            href="https://carbon.ms/terms"
+            href="https://dreampi.ms/terms"
             target="_blank"
             rel="noreferrer"
-            className="underline"
+            className="underline hover:text-purple-600 transition-colors"
           >
             Terms of Service
           </a>{" "}
           and{" "}
           <a
-            href="https://carbon.ms/privacy"
+            href="https://dreampi.ms/privacy"
             target="_blank"
             rel="noreferrer"
-            className="underline"
+            className="underline hover:text-purple-600 transition-colors"
           >
             Privacy Policy.
           </a>

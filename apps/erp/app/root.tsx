@@ -44,7 +44,7 @@ export const links: LinksFunction = () => {
 export const meta: MetaFunction = () => {
   return [
     {
-      title: "Carbon",
+      title: "Dreampi",
     },
   ];
 };
@@ -104,9 +104,9 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export function Document({
   children,
-  title = "Carbon",
+  title = "Dreampi",
   mode = "light",
-  theme = "blue",
+  theme = "dreampi",
 }: {
   children: React.ReactNode;
   title?: string;
@@ -144,7 +144,9 @@ export function Document({
   return (
     <html
       lang="en"
-      className={`${mode} h-full overflow-x-hidden`}
+      className={`${mode} h-full overflow-x-hidden ${
+        theme === "dreampi" ? "dreampi-theme" : ""
+      }`}
       style={themeStyle}
     >
       <head>
@@ -222,11 +224,9 @@ export function ErrorBoundary() {
     <Document title="Error!">
       <div className="light">
         <div className="flex flex-col w-full h-screen items-center justify-center space-y-4 ">
-          <img
-            src="/carbon-logo-mark.svg"
-            alt="Carbon Logo"
-            className="block max-w-[60px]"
-          />
+          <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl">
+            <span className="text-2xl font-bold text-white">D</span>
+          </div>
           <Heading size="h1">Something went wrong</Heading>
           <p className="text-muted-foreground max-w-2xl">{message}</p>
           <Button onClick={() => (window.location.href = "/")}>

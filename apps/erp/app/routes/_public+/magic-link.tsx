@@ -18,21 +18,23 @@ export default function ConfirmMagicLink() {
 
   return (
     <>
-      <div className="flex justify-center mb-4">
-        <img src="/carbon-logo-mark.svg" alt="Carbon Logo" className="w-36" />
-      </div>
-      <div className="rounded-lg md:bg-card md:border md:border-border md:shadow-lg p-8 w-[380px]">
-        <VStack spacing={4} className="items-center justify-center">
-          <Heading size="h3">Let's build something 🚀</Heading>
-          <Button
-            size="lg"
-            onClick={() => {
-              window.location.href = getConfirmationURL(token);
-            }}
-          >
-            Log In
-          </Button>
-        </VStack>
+      <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto">
+        <div className="flex items-center justify-center w-36 h-36 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl mb-8">
+          <span className="text-6xl font-bold text-white">D</span>
+        </div>
+        <div className="rounded-lg md:bg-card md:border md:border-border md:shadow-lg p-8 w-[380px]">
+          <VStack spacing={4} className="items-center justify-center">
+            <Heading size="h3">Let's build something 🚀</Heading>
+            <Button
+              size="lg"
+              onClick={() => {
+                window.location.href = getConfirmationURL(token);
+              }}
+            >
+              Log In
+            </Button>
+          </VStack>
+        </div>
       </div>
     </>
   );

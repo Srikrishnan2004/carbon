@@ -3,9 +3,11 @@ import { Redis } from "@upstash/redis";
 
 // Use environment variables or placeholders for Redis configuration
 const UPSTASH_REDIS_REST_URL =
-  process.env.UPSTASH_REDIS_REST_URL || "local_dev_placeholder_redis_url";
+  process.env.UPSTASH_REDIS_REST_URL ||
+  "https://capital-sponge-24314.upstash.io";
 const UPSTASH_REDIS_REST_TOKEN =
-  process.env.UPSTASH_REDIS_REST_TOKEN || "local_dev_placeholder_redis_token";
+  process.env.UPSTASH_REDIS_REST_TOKEN ||
+  "AV76AAIncDE1ZDg4YWVjODRhZmI0ZTBkOGZlMjdiNzU5ZjdlMzg3Y3AxMjQzMTQ";
 
 let redis: RedisType | null = null;
 
